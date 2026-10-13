@@ -649,7 +649,7 @@ function renderChatList() {
     const last = msgs[msgs.length - 1];
     let lastText = '开始一段对话...';
     if (last) {
-      if (last.type === 'redpacket') lastText = '[红包]';
+      if (last.type === 'redpacket') lastText = '[转账]';
       else if (last.type === 'options') lastText = '[选项]';
       else if (last.type === 'image') lastText = '[图片]';
       else if (last.type === 'sticker') lastText = '[表情]';
@@ -742,9 +742,15 @@ function openChat(chatId) {
   state.activeChatId = chatId;
   state.unread[chatId] = 0;
   persist();
-  const name = isGroupChat(chatId) ? (getGroupById(chatId.slice(2))?.name || '群聊') : (getContactById(chatId)?.name || '角色');
+  const contact = isGroupChat(chatId) ? null : getContactById(chatId);
+  const name = isGroupChat(chatId) ? (getGroupById(chatId.slice(2))?.name || '群聊') : (contact?.name || '角色');
   const nameEl = document.getElementById('chatPeerName');
   if (nameEl) nameEl.textContent = name;
+  const chatPage = document.getElementById('page-chat');
+  if (chatPage) {
+    if (contact?.avatar) chatPage.style.setProperty('--wa-chat-avatar', `url("${contact.avatar}")`);
+    else chatPage.style.removeProperty('--wa-chat-avatar');
+  }
   if (!state.chats[chatId]) state.chats[chatId] = [];
   document.getElementById('plusPanelInline')?.classList.add('hidden');
   pushPage('page-chat');
@@ -877,7 +883,10 @@ function renderMessages(options = {}) {
       const preview = (m.records || []).slice(0, 4).map(r => `<div class="chat-record-line"><b>${escapeHtml(r.senderName)}：</b>${escapeHtml(r.text)}</div>`).join('');
       bubbleHtml = `<div class="bubble chat-record-bubble" data-chatrecord="${m.id}"><div class="chat-record-title">聊天记录</div>${preview}<div class="chat-record-footer">${(m.records || []).length} 条消息 · 点击查看</div></div>`;
     } else if (m.type === 'redpacket') {
-      bubbleHtml = `<div class="bubble redpacket ${m.redpacket.status}" data-redpacket="${m.id}"><div class="rp-main"><div class="rp-envelope"><span>¥</span></div><div class="rp-text"><div class="rp-note">${escapeHtml(m.redpacket.note)}</div><div class="rp-status">${m.redpacket.status==='claimed'?'红包已被领取':'领取红包'}</div></div></div><div class="rp-footer">微信红包</div></div>`;
+      const amount = Number(m.redpacket?.amount || 0).toFixed(2);
+      const title = m.redpacket?.note || 'Transfer';
+      const status = m.redpacket.status === 'claimed' ? 'Completed' : (isMe ? 'Pending' : 'Tap to receive');
+      bubbleHtml = `<div class="bubble transfer ${m.redpacket.status}" data-redpacket="${m.id}"><div class="transfer-icon">↗</div><div class="transfer-copy"><strong>${escapeHtml(title)}</strong><span>HK$ ${amount} · ${status}</span></div></div>`;
     } else if (m.type === 'options') {
       bubbleHtml = `<div class="bubble options">
         <div class="options-title">请选择</div>
@@ -1040,7 +1049,7 @@ function messageSummary(msg) {
   if (msg.type === 'image') return '[图片]';
   if (msg.type === 'sticker') return '[表情]';
   if (msg.type === 'location') return `[位置] ${msg.text || ''}`.trim();
-  if (msg.type === 'redpacket') return `[红包] ${msg.redpacket?.note || ''}`.trim();
+  if (msg.type === 'redpacket') return `[转账] ${msg.redpacket?.note || ''}`.trim();
   if (msg.type === 'call') return `[${msg.callType === 'video' ? '视频通话' : '语音通话'}]`;
   return String(msg.text || '').slice(0, 160);
 }
@@ -1309,7 +1318,7 @@ async function replyWithTarot(chatId, fromId, text, persona) {
   try {
     if (shouldSendRedPacket(cards)) {
       const amount = randomRedPacketAmount();
-      const note = pool[secureRandomInt(pool.length)] || '恭喜发财';
+      const note = pool[secureRandomInt(pool.length)] || 'Transfer';
       addMessage(chatId, fromId, note, { type:'redpacket', cards, shieldCards, shield, redpacket:{ amount, note, status:'unclaimed', claimedBy:null } });
       return;
     }
@@ -2100,18 +2109,18 @@ async function replyToOptions(chatId, fromId, options, persona) {
   }
 }
 
-/* ============ 微信红包 ============ */
-function openSendRedPacket(){document.getElementById('rpAmount').value='';document.getElementById('rpNote').value='恭喜发财，大吉大利';document.getElementById('sendRedPacketSheet')?.classList.remove('hidden');}
+/* ============ 转账记录（兼容旧红包数据结构） ============ */
+function openSendRedPacket(){document.getElementById('rpAmount').value='';document.getElementById('rpNote').value='Transfer';document.getElementById('sendRedPacketSheet')?.classList.remove('hidden');}
 function bindRedPacket(){
  document.getElementById('rpCancel')?.addEventListener('click',()=>document.getElementById('sendRedPacketSheet').classList.add('hidden'));
- document.getElementById('rpConfirm')?.addEventListener('click',()=>{const amount=Number(document.getElementById('rpAmount').value),note=document.getElementById('rpNote').value.trim()||'恭喜发财，大吉大利';if(!Number.isFinite(amount)||amount<.01||amount>200){alert('单个红包金额须为 ¥0.01–200.00');return;}const chatId=state.activeChatId;if(!chatId)return;const msg=addMessage(chatId,'me',note,{type:'redpacket',redpacket:{amount:amount.toFixed(2),note,status:'unclaimed',claimedBy:null,sentAt:Date.now()}});document.getElementById('sendRedPacketSheet').classList.add('hidden');setTimeout(async()=>{const t=(state.chats[chatId]||[]).find(m=>m.id===msg.id);if(!t||t.redpacket.status==='claimed')return;const g=isGroupChat(chatId)?getGroupById(chatId.slice(2)):null,claimer=g?.memberIds?.length?g.memberIds[secureRandomInt(g.memberIds.length)]:chatId,c=getContactById(claimer);if(!c)return;t.redpacket.status='claimed';t.redpacket.claimedBy=claimer;t.redpacket.claimedAt=Date.now();persist();renderMessages();addMessage(chatId,claimer,`${c.name}领取了你的红包`,{systemNote:true});await replyWithTarot(chatId,claimer,'(刚领取了我发的微信红包，自然回应，不要复述系统提示)',c.persona);},8000+secureRandomInt(52000));});
+ document.getElementById('rpConfirm')?.addEventListener('click',()=>{const amount=Number(document.getElementById('rpAmount').value),note=document.getElementById('rpNote').value.trim()||'Transfer';if(!Number.isFinite(amount)||amount<.01||amount>200){alert('单笔转账金额须为 ¥0.01–200.00');return;}const chatId=state.activeChatId;if(!chatId)return;const msg=addMessage(chatId,'me',note,{type:'redpacket',redpacket:{amount:amount.toFixed(2),note,status:'unclaimed',claimedBy:null,sentAt:Date.now()}});document.getElementById('sendRedPacketSheet').classList.add('hidden');setTimeout(async()=>{const t=(state.chats[chatId]||[]).find(m=>m.id===msg.id);if(!t||t.redpacket.status==='claimed')return;const g=isGroupChat(chatId)?getGroupById(chatId.slice(2)):null,claimer=g?.memberIds?.length?g.memberIds[secureRandomInt(g.memberIds.length)]:chatId,c=getContactById(claimer);if(!c)return;t.redpacket.status='claimed';t.redpacket.claimedBy=claimer;t.redpacket.claimedAt=Date.now();persist();renderMessages();addMessage(chatId,claimer,`${c.name} received your transfer`,{systemNote:true});await replyWithTarot(chatId,claimer,'(刚收到我发的转账，自然回应，不要复述系统提示)',c.persona);},8000+secureRandomInt(52000));});
 }
 function renderRedPacketDetail(msg){
  const mine=msg.from==='me',sender=mine?{name:state.myName||'我',avatar:state.myAvatar}:getContactById(msg.from),av=document.getElementById('rpDetailAvatar');
- av.style.backgroundImage=sender?.avatar?`url('${sender.avatar}')`:'';av.textContent=sender?.avatar?'':(sender?.name||'对方').slice(0,1);document.getElementById('rpDetailSender').textContent=`${sender?.name||'对方'}的红包`;document.getElementById('rpDetailNote').textContent=msg.redpacket.note;
+ av.style.backgroundImage=sender?.avatar?`url('${sender.avatar}')`:'';av.textContent=sender?.avatar?'':(sender?.name||'对方').slice(0,1);document.getElementById('rpDetailSender').textContent=mine?'Transfer sent':`Transfer from ${sender?.name||'对方'}`;document.getElementById('rpDetailNote').textContent=msg.redpacket.note;
  const open=document.getElementById('rpDetailOpen'),result=document.getElementById('rpDetailResult'),waiting=document.getElementById('rpDetailWaiting');open.classList.add('hidden');result.classList.add('hidden');waiting.classList.add('hidden');
- if(msg.redpacket.status==='claimed'){result.classList.remove('hidden');document.getElementById('rpAmountShow').textContent=mine?'红包已领取':msg.redpacket.amount;document.getElementById('rpResultUnit').textContent=mine?'':'元';document.getElementById('rpResultHint').textContent=mine?`${getContactById(msg.redpacket.claimedBy)?.name||'对方'}已领取`:'已存入零钱';}
- else if(mine)waiting.classList.remove('hidden');else{open.classList.remove('hidden');open.onclick=()=>{if(msg.redpacket.status==='claimed')return;msg.redpacket.status='claimed';msg.redpacket.claimedBy='me';msg.redpacket.claimedAt=Date.now();const w=getWallet(),amt=Number(msg.redpacket.amount)||0;w.balance+=amt;w.transactions.push({title:`微信红包 · ${sender?.name||'对方'}`,amount:amt,ts:Date.now()});saveWallet(w);persist();renderMessages();renderRedPacketDetail(msg);};}
+ if(msg.redpacket.status==='claimed'){result.classList.remove('hidden');document.getElementById('rpAmountShow').textContent=mine?'Transfer completed':msg.redpacket.amount;document.getElementById('rpResultUnit').textContent=mine?'':'元';document.getElementById('rpResultHint').textContent=mine?`${getContactById(msg.redpacket.claimedBy)?.name||'对方'} received it`:'Added to balance';}
+ else if(mine)waiting.classList.remove('hidden');else{open.classList.remove('hidden');open.onclick=()=>{if(msg.redpacket.status==='claimed')return;msg.redpacket.status='claimed';msg.redpacket.claimedBy='me';msg.redpacket.claimedAt=Date.now();const w=getWallet(),amt=Number(msg.redpacket.amount)||0;w.balance+=amt;w.transactions.push({title:`Transfer · ${sender?.name||'对方'}`,amount:amt,ts:Date.now()});saveWallet(w);persist();renderMessages();renderRedPacketDetail(msg);};}
 }
 function openRedPacketDetail(msgId){const msg=(state.chats[state.activeChatId]||[]).find(m=>String(m.id)===String(msgId));if(!msg?.redpacket)return;renderRedPacketDetail(msg);document.getElementById('redPacketOpenSheet')?.classList.remove('hidden');}
 
@@ -2441,7 +2450,7 @@ function bindMyAvatarUpload() {
   });
 }
 
-/* ============ 钱包（初始9999, 只能靠红包/转账增加, 充值每日限1000） ============ */
+/* ============ 钱包（初始9999, 只能靠转账增加, 充值每日限1000） ============ */
 function renderWalletPage() {
   const w = getWallet();
   document.getElementById('walletBalanceAmount').textContent = `¥${w.balance.toFixed(2)}`;
@@ -2506,7 +2515,7 @@ function bindWallet() {
   });
 }
 
-/* ============ 小程式：双人随机游戏（无 AI） ============ */
+/* ============ Legacy modules: random games (hidden in WhatsApp shell) ============ */
 const PARTY_GAMES = [
   { id:'undercover', title:'谁是卧底·双人版', icon:'🕵️', color:'#5b4b8a', subtitle:'相近词语、随机身份，猜出谁拿到了卧底词' },
   { id:'heartcards', title:'心动抽卡', icon:'💗', color:'#d66b86', subtitle:'轮流抽卡，对方会按卡片随机回应' },
@@ -2748,7 +2757,7 @@ function bindPartyGames() {
   document.getElementById('partyGameChatInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')sendPartyGameChat();});
 }
 
-/* ============ 小程式：附近外卖 ============ */
+/* ============ Legacy modules: nearby ordering (hidden in WhatsApp shell) ============ */
 const TEA_STORES=[
  {id:'mutea',name:'沐茶 MUTEA',short:'全港分店 · 鲜果茶 · 轻乳茶',emoji:'🧋',color:'#15291f',mark:'MUTEA',hours:'营业至 22:30',eta:'25–35 分钟',freeAt:38,categories:['人气推荐','轻乳茶','鲜果茶','原叶纯茶'],branches:['元朗形点店','屯门市广场店','荃湾广场店','沙田新城市店','旺角朗豪坊店','尖沙咀海港城店','观塘APM店','铜锣湾时代广场店']},
  {id:'morning',name:'晨光早餐铺',short:'全港分店 · 港式早餐 · 粥粉面',emoji:'🥪',color:'#d98539',mark:'MORNING',hours:'营业至 11:30',eta:'20–30 分钟',freeAt:32,categories:['招牌早餐','三明治','粥粉面'],branches:['元朗千色汇店','屯门V city店','荃湾荃新天地店','沙田好运中心店','旺角雅兰中心店','尖沙咀K11店','观塘裕民坊店','铜锣湾利舞台店']},
@@ -2781,7 +2790,7 @@ let _teaDraft={cart:{},storeId:'mutea',branchName:'',method:'delivery',recipient
 
 function teaOrderKey(storeId){return TEA_ORDER_PREFIX+(storeId||'mutea');}
 
-/* ============ 小程式：私人微博 ============ */
+/* ============ Legacy modules: private log (hidden in WhatsApp shell) ============ */
 let _privateBlogEditingId = null, _privateBlogMenuId = null, _privateBlogCommentingId = null, _privateBlogImage = '';
 function privateBlogPost(id) { return state.privateBlog.find(x => String(x.id) === String(id)); }
 function privateBlogTime(ts) { const d = new Date(Number(ts) || Date.now()); return d.toLocaleString([], { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }); }
@@ -2854,8 +2863,8 @@ function bindPrivateBlog() {
   document.getElementById('privateBlogActionSheet')?.addEventListener('click',e=>{if(e.target.id==='privateBlogActionSheet')closePrivateBlogMenu();});
 }
 
-function renderMiniProgramStores(){const box=document.getElementById('miniProgramStoreList');if(!box)return;box.innerHTML=`<div class="mini-programs-title">生活记录</div><div class="mini-programs-grid"><button class="mini-program-tile" data-private-blog><div class="mini-app-icon game" style="background:linear-gradient(145deg,#245d3b,#65a575)">记</div><span>私人微博</span></button></div><div class="mini-programs-title" style="margin-top:24px">双人游戏</div><div class="mini-programs-grid">${PARTY_GAMES.map(g=>`<button class="mini-program-tile" data-party-game="${g.id}"><div class="mini-app-icon game" style="background:${g.color}">${g.icon}</div><span>${escapeHtml(g.title)}</span></button>`).join('')}</div><div class="mini-programs-title" style="margin-top:24px">外卖点单</div><div class="mini-programs-grid">${TEA_STORES.map(s=>`<button class="mini-program-tile" data-mini-store="${s.id}"><div class="mini-app-icon food" style="background:${s.color}">${s.emoji}</div><span>${escapeHtml(s.name)}</span></button>`).join('')}</div><div class="mini-program-tip">每个图标都是独立小程序，进度会分别保存</div>`;}
-function bindMiniPrograms(){const open=()=>{renderMiniProgramStores();pushPage('page-miniprograms');};document.getElementById('rowMiniPrograms')?.addEventListener('click',open);document.getElementById('waOpenMiniProgramsBtn')?.addEventListener('click',open);document.getElementById('backFromMiniPrograms')?.addEventListener('click',()=>popPage());document.getElementById('miniProgramStoreList')?.addEventListener('click',e=>{const x=e.target.closest('[data-mini-store]'),g=e.target.closest('[data-party-game]'),b=e.target.closest('[data-private-blog]');if(x)openTeaOrder(x.dataset.miniStore);else if(g)openPartyGame(g.dataset.partyGame);else if(b)openPrivateBlog();});}
+function renderMiniProgramStores(){const box=document.getElementById('miniProgramStoreList');if(box)box.innerHTML='<div class="mini-programs-title">No extra tools in WhatsApp mode</div>';}
+function bindMiniPrograms(){document.getElementById('backFromMiniPrograms')?.addEventListener('click',()=>popPage());}
 function teaCartItems(){return Object.values(_teaDraft.cart).flat();}
 function teaCartCount(){return teaCartItems().length;}
 function teaSubtotal(){return teaCartItems().reduce((sum,x)=>sum+(TEA_MENU.find(p=>p.id===x.productId)?.price||0)+(TEA_TOPPINGS[x.topping]?.price||0),0);}
