@@ -438,6 +438,68 @@ body { background:#d1d7db; }
 .cloud-status-card.verified .cloud-status-icon { color:#008069; }
 #debugErrorBanner { font-family:monospace; }
 
+/* ===== WhatsApp structural pass ===== */
+body { background:#f0f2f5; color:#111b21; }
+#app { background:#f0f2f5; box-shadow:0 0 0 1px rgba(17,27,33,.08),0 18px 48px rgba(17,27,33,.16); }
+.page { background:#f0f2f5; }
+.nav-bar { background:#fff; color:#111b21; border-bottom:0; min-height:54px; padding-left:20px; padding-right:16px; box-shadow:none; }
+.nav-title { color:#111b21; font-size:22px; font-weight:700; letter-spacing:0; }
+.nav-bar .icon-btn { color:#54656f; opacity:1; }
+.nav-bar .icon-btn path, .nav-bar .icon-btn circle, .nav-bar .icon-btn line, .nav-bar .icon-btn rect { stroke:currentColor !important; }
+#page-chatlist .nav-bar { min-height:92px; align-items:flex-end; padding-bottom:10px; }
+#page-chatlist .nav-bar > span:first-child::before { content:'Edit'; color:#008069; font-size:16px; font-weight:400; }
+#page-chatlist .nav-bar #chatListNavTitle { position:absolute; left:20px; bottom:42px; font-size:34px; line-height:1; }
+#page-chatlist #btnAddMenu { width:30px!important; height:30px!important; padding:6px; border-radius:50%; background:#00a884; color:#fff; margin-bottom:1px; }
+#page-chatlist .chat-list { background:#fff; padding-top:94px; position:relative; }
+#page-chatlist .chat-list::before { content:'Search'; position:absolute; top:8px; left:16px; right:16px; height:37px; border-radius:10px; background:#f0f2f5; color:#667781; display:flex; align-items:center; padding-left:38px; font-size:16px; }
+#page-chatlist .chat-list::after { content:'All  Unread  Favorites  Groups'; position:absolute; top:55px; left:16px; right:16px; display:flex; align-items:center; color:#008069; font-size:14px; word-spacing:16px; white-space:pre; }
+.chat-item, .contact-item { min-height:72px; padding:10px 16px; background:#fff; border-bottom:0; position:relative; }
+.chat-item::after, .contact-item::after { content:''; position:absolute; left:82px; right:0; bottom:0; height:1px; background:#e9edef; transform:scaleY(.5); }
+.chat-item:active, .contact-item:active, .chat-item.pinned, .contact-item.pinned { background:#f5f6f6; }
+.chat-item .avatar, .contact-item .avatar { width:52px!important; height:52px!important; border-radius:50%; }
+.info { margin-left:14px; }
+.name { color:#111b21; font-size:17px; font-weight:500; }
+.last-msg { color:#667781; font-size:15px; margin-top:3px; }
+.time { color:#667781; font-size:12px; }
+.unread-badge { background:#25d366; box-shadow:0 0 0 2px #fff; }
+.tab-bar { height:calc(58px + env(safe-area-inset-bottom)); background:#fff; border-top:1px solid #e9edef; padding-bottom:env(safe-area-inset-bottom); }
+.tab-item { color:#54656f; font-size:10.5px; font-weight:500; gap:3px; }
+.tab-item.active { color:#008069; }
+.tab-icon { width:23px!important; height:23px!important; }
+#page-chat .nav-bar { background:#075e54; color:#fff; min-height:56px; padding-top:calc(env(safe-area-inset-top) + 8px); padding-bottom:8px; }
+#page-chat .nav-title, #page-chat>.nav-bar #chatPeerName { color:#fff; font-size:18px; font-weight:600; }
+#page-chat .nav-bar .icon-btn { color:#fff; }
+#page-chat .chat-nav-actions { gap:18px; }
+.msg-list { background-color:#efeae2; background-image:radial-gradient(circle at 20px 20px,rgba(17,27,33,.035) 1px,transparent 1.2px),radial-gradient(circle at 58px 46px,rgba(17,27,33,.03) 1px,transparent 1.2px); background-size:78px 78px; padding:10px 8px 14px; gap:3px; }
+.msg-col { margin:1px 0; }
+.msg-row { gap:0; max-width:100%; }
+.msg-row .avatar, .message-avatar-link { display:none!important; }
+.bubble { max-width:min(78%, 330px); border-radius:7.5px; padding:6px 9px 7px; font-size:16px; line-height:1.42; box-shadow:0 1px .5px rgba(11,20,26,.13); }
+.msg-row:not(.me) .bubble { background:#fff; color:#111b21; border-top-left-radius:0; }
+.msg-row.me .bubble { background:#d9fdd3; color:#111b21; border-top-right-radius:0; }
+.bubble::before { display:none; }
+.bubble.voice, .bubble.call { min-width:142px; padding:9px 12px; gap:10px; border-radius:9px; }
+.bubble.voice svg path { fill:#00a884; }
+.voice-message-wrap { align-items:flex-end; max-width:78%; }
+.msg-row:not(.me) .voice-message-wrap { align-items:flex-start; }
+.voice-transcript { max-width:100%; background:#fff; color:#3b4a54; border-radius:7.5px; box-shadow:0 1px .5px rgba(11,20,26,.08); }
+.input-bar { background:#efeae2; border-top:0; gap:7px; padding:7px 8px; padding-bottom:calc(7px + env(safe-area-inset-bottom)); flex-wrap:wrap; }
+.input-bar input, .hold-talk-btn { height:42px; border-radius:21px; background:#fff; box-shadow:none; padding:0 16px; }
+.input-bar .icon-btn { width:30px!important; height:30px!important; color:#54656f; }
+.send-btn { width:42px; height:42px; padding:0; border-radius:50%; background:#00a884; color:transparent; position:relative; overflow:hidden; }
+.send-btn::before { content:''; position:absolute; left:15px; top:11px; width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:14px solid #fff; transform:rotate(-8deg); }
+.quote-compose { background:#fff; border-left:4px solid #00a884; border-radius:9px; color:#54656f; }
+.plus-panel { background:#f0f2f5; border-top:1px solid #e9edef; }
+.plus-icon-circle { border-radius:50%; }
+.message-action-popover { background:#233138; border-radius:12px; }
+.message-action-popover::after { border-top-color:#233138; }
+.message-action-popover.below::after { border-bottom-color:#233138; }
+.wa-empty-panel { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:34px; background:#fff; color:#54656f; }
+.wa-empty-panel h2 { color:#111b21; font-size:24px; margin:14px 0 8px; }
+.wa-empty-panel p { max-width:280px; font-size:14px; line-height:1.45; }
+.wa-empty-panel button { margin-top:18px; border:0; border-radius:22px; background:#00a884; color:#fff; padding:11px 18px; font-size:15px; }
+.wa-community-icon { width:78px; height:78px; border-radius:50%; background:#e7fce3; color:#00a884; display:flex; align-items:center; justify-content:center; font-size:54px; }
+
 /* ===== 动效：消息气泡出现、输入中、红包提示、未读徽标 ===== */
 @keyframes bubbleIn { from { opacity:0; transform:translateY(10px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
 .msg-col:last-child { animation:bubbleIn .28s cubic-bezier(.25,.46,.45,.94); }
@@ -550,6 +612,22 @@ body { background:#d1d7db; }
           <svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="#c7c7cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
+    </div>
+    <div class="tab-bar" data-tabbar></div>
+  </div>
+
+  <!-- WhatsApp: Communities -->
+  <div class="page hidden" id="page-communities" data-tab="communities">
+    <div class="nav-bar">
+      <span></span>
+      <span class="nav-title">Communities</span>
+      <span></span>
+    </div>
+    <div class="wa-empty-panel">
+      <div class="wa-community-icon">◎</div>
+      <h2>Communities</h2>
+      <p>这里先保留给群聊和小程式入口，不影响现有聊天同步。</p>
+      <button type="button" id="waOpenMiniProgramsBtn">Open mini apps</button>
     </div>
     <div class="tab-bar" data-tabbar></div>
   </div>
@@ -1184,11 +1262,11 @@ body { background:#d1d7db; }
   </div>
 </div>
 
-<script src="js/tarot.js?v=60" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
-<script src="js/wordcards.js?v=60" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
-<script src="js/dictionary.js?v=60" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
-<script src="js/ai.js?v=60" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
-<script src="js/cloud.js?v=60" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
-<script src="js/app.js?v=60" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
+<script src="js/tarot.js?v=2" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
+<script src="js/wordcards.js?v=2" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
+<script src="js/dictionary.js?v=2" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
+<script src="js/ai.js?v=2" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
+<script src="js/cloud.js?v=2" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
+<script src="js/app.js?v=2" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
 </body>
 </html>
