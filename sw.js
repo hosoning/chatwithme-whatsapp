@@ -30,7 +30,7 @@ firebase.messaging().onBackgroundMessage(payload => {
   });
 });
 
-const CACHE_NAME = 'chatwithme-whatsapp-v1';
+const CACHE_NAME = 'chatwithme-whatsapp-v2';
 const ASSETS = [
   './', './index.html',
   './js/tarot.js', './js/wordcards.js', './js/dictionary.js', './js/ai.js', './js/cloud.js', './js/app.js',
