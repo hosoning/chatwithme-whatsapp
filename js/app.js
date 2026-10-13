@@ -518,10 +518,11 @@ function bindSwipeBack() {
 }
 
 const TAB_ITEMS = [
-  {tab:'chat', label:'WhatsApp', page:'page-chatlist', icon:'<path d="M4 4h16v12H8l-4 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'},
-  {tab:'contacts', label:'通讯录', page:'page-contacts', icon:'<circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6" fill="none" stroke="currentColor" stroke-width="1.6"/>'},
-  {tab:'discover', label:'发现', page:'page-discover', icon:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 9l-2 6-6 2 2-6z" fill="currentColor"/>'},
-  {tab:'me', label:'我', page:'page-me', icon:'<circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 21c1.5-5 5-7 8-7s6.5 2 8 7" fill="none" stroke="currentColor" stroke-width="1.6"/>'}
+  {tab:'discover', label:'Updates', page:'page-discover', icon:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
+  {tab:'contacts', label:'Calls', page:'page-contacts', icon:'<path d="M5 4c1 4 2 7 5 9s5 4 9 5l1-3c-2-1-3-2-5-3l-2 2c-2-1-4-3-5-5l2-2c-1-2-2-3-3-5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>'},
+  {tab:'communities', label:'Communities', page:'page-communities', icon:'<circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.8-3 2.7-4.5 4.5-4.5s3.7 1.5 4.5 4.5M11.5 19c.8-3 2.7-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6"/>'},
+  {tab:'chat', label:'Chats', page:'page-chatlist', icon:'<path d="M4 5.5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>'},
+  {tab:'me', label:'Settings', page:'page-me', icon:'<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.3 3.1a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.3 3.1h5l.3-3.1a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>'}
 ];
 function renderTabBars() {
   document.querySelectorAll('[data-tabbar]').forEach(bar => {
@@ -623,7 +624,7 @@ function updateChatListNavTitle() {
   const el = document.getElementById('chatListNavTitle');
   if (!el) return;
   const total = totalUnreadCount();
-  el.textContent = total > 0 ? `WhatsApp (${total > 99 ? '99+' : total})` : 'WhatsApp';
+  el.textContent = total > 0 ? `Chats (${total > 99 ? '99+' : total})` : 'Chats';
 }
 
 /* ============ 聊天列表 / 通讯录（含置顶排序 + 未读徽标） ============ */
@@ -2854,7 +2855,7 @@ function bindPrivateBlog() {
 }
 
 function renderMiniProgramStores(){const box=document.getElementById('miniProgramStoreList');if(!box)return;box.innerHTML=`<div class="mini-programs-title">生活记录</div><div class="mini-programs-grid"><button class="mini-program-tile" data-private-blog><div class="mini-app-icon game" style="background:linear-gradient(145deg,#245d3b,#65a575)">记</div><span>私人微博</span></button></div><div class="mini-programs-title" style="margin-top:24px">双人游戏</div><div class="mini-programs-grid">${PARTY_GAMES.map(g=>`<button class="mini-program-tile" data-party-game="${g.id}"><div class="mini-app-icon game" style="background:${g.color}">${g.icon}</div><span>${escapeHtml(g.title)}</span></button>`).join('')}</div><div class="mini-programs-title" style="margin-top:24px">外卖点单</div><div class="mini-programs-grid">${TEA_STORES.map(s=>`<button class="mini-program-tile" data-mini-store="${s.id}"><div class="mini-app-icon food" style="background:${s.color}">${s.emoji}</div><span>${escapeHtml(s.name)}</span></button>`).join('')}</div><div class="mini-program-tip">每个图标都是独立小程序，进度会分别保存</div>`;}
-function bindMiniPrograms(){document.getElementById('rowMiniPrograms')?.addEventListener('click',()=>{renderMiniProgramStores();pushPage('page-miniprograms');});document.getElementById('backFromMiniPrograms')?.addEventListener('click',()=>popPage());document.getElementById('miniProgramStoreList')?.addEventListener('click',e=>{const x=e.target.closest('[data-mini-store]'),g=e.target.closest('[data-party-game]'),b=e.target.closest('[data-private-blog]');if(x)openTeaOrder(x.dataset.miniStore);else if(g)openPartyGame(g.dataset.partyGame);else if(b)openPrivateBlog();});}
+function bindMiniPrograms(){const open=()=>{renderMiniProgramStores();pushPage('page-miniprograms');};document.getElementById('rowMiniPrograms')?.addEventListener('click',open);document.getElementById('waOpenMiniProgramsBtn')?.addEventListener('click',open);document.getElementById('backFromMiniPrograms')?.addEventListener('click',()=>popPage());document.getElementById('miniProgramStoreList')?.addEventListener('click',e=>{const x=e.target.closest('[data-mini-store]'),g=e.target.closest('[data-party-game]'),b=e.target.closest('[data-private-blog]');if(x)openTeaOrder(x.dataset.miniStore);else if(g)openPartyGame(g.dataset.partyGame);else if(b)openPrivateBlog();});}
 function teaCartItems(){return Object.values(_teaDraft.cart).flat();}
 function teaCartCount(){return teaCartItems().length;}
 function teaSubtotal(){return teaCartItems().reduce((sum,x)=>sum+(TEA_MENU.find(p=>p.id===x.productId)?.price||0)+(TEA_TOPPINGS[x.topping]?.price||0),0);}
