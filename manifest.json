@@ -1,0 +1,12 @@
+{
+  "name": "ChatWithMe WhatsApp",
+  "short_name": "WhatsApp",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#efeae2",
+  "theme_color": "#075e54",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon/whatsapp-app-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
