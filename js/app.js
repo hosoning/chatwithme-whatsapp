@@ -787,8 +787,14 @@ function openChatSearch() {
   renderChatSearchResults(); pushPage('page-chat-search');
   setTimeout(() => document.getElementById('chatSearchInput')?.focus(), 320);
 }
+function startHeaderCall(type) {
+  const chatId = state.activeChatId;
+  if (!chatId || isGroupChat(chatId)) return;
+  const contact = getContactById(chatId);
+  if (contact) openCallOverlay(type, contact);
+}
 function bindChatSearch() {
-  document.getElementById('btnChatSearch')?.addEventListener('click', openChatSearch);
+  document.getElementById('btnChatSearch')?.addEventListener('click', () => startHeaderCall('video'));
   document.getElementById('backFromChatSearch')?.addEventListener('click', () => popPage());
   document.getElementById('chatSearchCancel')?.addEventListener('click', () => popPage());
   document.getElementById('chatSearchInput')?.addEventListener('input', renderChatSearchResults);
@@ -3033,7 +3039,7 @@ function bindNavButtons() {
     });
     document.getElementById('settingsSearchEmpty')?.classList.toggle('hidden', visible > 0);
   });
-  document.getElementById('btnChatSettings')?.addEventListener('click', openChatSettings);
+  document.getElementById('btnChatSettings')?.addEventListener('click', () => startHeaderCall('voice'));
   document.getElementById('chatSettingsClose')?.addEventListener('click', () => document.getElementById('chatSettingsSheet').classList.add('hidden'));
   document.getElementById('rpDetailClose')?.addEventListener('click', () => document.getElementById('redPacketOpenSheet').classList.add('hidden'));
 }
