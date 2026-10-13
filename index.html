@@ -352,7 +352,7 @@ body { font-family:-apple-system,"PingFang SC","Helvetica Neue",sans-serif; back
 .dyn-label { color:#fff; font-size:12px; margin-top:2px; opacity:0; transition:opacity .25s ease .15s; }
 .dyn-island.expanded .dyn-label { opacity:.85; }
 
-/* ===== 小程式 / 外卖点餐 ===== */
+/* ===== Legacy mini app/order modules hidden in WhatsApp shell ===== */
 .mini-programs-scroll{flex:1;overflow-y:auto;background:#f2f2f2;padding:18px 14px}.mini-programs-title{font-size:14px;color:#777;margin:2px 2px 14px}.mini-programs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 10px;background:#fff;border-radius:14px;padding:22px 10px}.mini-program-tile{border:0;background:transparent;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px}.mini-program-tile .mini-app-icon{width:54px;height:54px;border-radius:12px}.mini-program-tile span{width:100%;font-size:12px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.mini-program-tip{font-size:12px;color:#aaa;text-align:center;margin-top:18px}
 .mini-app-list-item{display:flex;align-items:center;gap:12px;padding:16px;background:#fff;border-radius:10px;margin:12px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .mini-app-icon{width:48px;height:48px;border-radius:11px;background:#15291f;display:flex;align-items:center;justify-content:center}
@@ -500,7 +500,74 @@ body { background:#f0f2f5; color:#111b21; }
 .wa-empty-panel button { margin-top:18px; border:0; border-radius:22px; background:#00a884; color:#fff; padding:11px 18px; font-size:15px; }
 .wa-community-icon { width:78px; height:78px; border-radius:50%; background:#e7fce3; color:#00a884; display:flex; align-items:center; justify-content:center; font-size:54px; }
 
-/* ===== 动效：消息气泡出现、输入中、红包提示、未读徽标 ===== */
+/* ===== WhatsApp reference pass: no WeChat mini-app residue ===== */
+#rowMiniPrograms, #waOpenMiniProgramsBtn { display:none!important; }
+#page-communities .wa-empty-panel p { display:none; }
+#page-communities .wa-empty-panel h2::after { content:' stay synced with your shared chats.'; display:block; color:#667781; font-size:14px; font-weight:400; line-height:1.45; margin-top:8px; }
+#page-chat .nav-bar { background:#fdfcf8; color:#111; border-bottom:1px solid rgba(17,27,33,.08); min-height:52px; padding-top:calc(env(safe-area-inset-top) + 6px); padding-bottom:7px; }
+#page-chat .nav-title, #page-chat>.nav-bar #chatPeerName { color:#111; font-size:16px; font-weight:650; position:static; transform:none; max-width:44%; pointer-events:auto; }
+#page-chat .nav-bar .icon-btn { color:#111; }
+#page-chat .chat-nav-actions { gap:20px; }
+.msg-list {
+  background-color:#f7f2e8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%23d9d0c2' stroke-width='1.2' opacity='.55'%3E%3Cpath d='M18 28h22v16H18zM22 48h14M72 18c8 0 14 5 14 12S80 42 72 42s-14-5-14-12S64 18 72 18zM110 28l18 10-18 10zM24 94c10-10 24-8 30 4-12 0-22 4-30-4zM98 88h28v20H98zM102 112h20M48 126c6 0 11 5 11 11s-5 11-11 11-11-5-11-11 5-11 11-11zM118 132c12-8 22-4 25 8-10 3-18 2-25-8z'/%3E%3Cpath d='M134 72c0 7-5 12-12 12s-12-5-12-12 5-12 12-12 12 5 12 12zM12 142h18M138 18h12M78 116l10 10-10 10-10-10z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:160px 160px;
+  padding:8px 10px 12px;
+  gap:5px;
+}
+.msg-time-divider { align-self:center; background:rgba(255,255,255,.86); color:#667781; border-radius:8px; padding:4px 9px; font-size:12px; margin:8px 0; box-shadow:0 1px .5px rgba(11,20,26,.08); }
+.msg-system { align-self:center; background:rgba(255,255,255,.86); color:#667781; border-radius:8px; padding:5px 9px; font-size:12px; margin:5px auto; max-width:78%; box-shadow:0 1px .5px rgba(11,20,26,.08); }
+.bubble { max-width:min(74%, 310px); border-radius:10px; padding:6px 8px 6px; font-size:15.8px; line-height:1.36; }
+.msg-row:not(.me) .bubble { border-top-left-radius:10px; }
+.msg-row.me .bubble { background:#d9fdd3; border-top-right-radius:10px; }
+.bubble::after { content:attr(data-time); display:inline-block; margin-left:8px; color:#667781; font-size:11px; line-height:1; vertical-align:-2px; }
+.bubble.transfer { width:244px; max-width:78%; display:flex; align-items:center; gap:10px; background:#fff!important; color:#111b21; padding:10px 11px; border-radius:12px; }
+.msg-row.me .bubble.transfer { background:#d9fdd3!important; }
+.transfer-icon { width:34px; height:34px; border-radius:50%; background:#00a884; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.transfer-copy { min-width:0; display:flex; flex-direction:column; gap:2px; }
+.transfer-copy strong { font-size:15px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.transfer-copy span { color:#667781; font-size:12px; }
+.bubble.redpacket { display:none!important; }
+.input-bar { background:#f7f2e8; padding:6px 8px calc(6px + env(safe-area-inset-bottom)); gap:8px; flex-wrap:nowrap; }
+.input-bar .quote-compose { position:absolute; left:8px; right:8px; bottom:calc(55px + env(safe-area-inset-bottom)); width:auto; }
+#micBtn { order:5; width:36px!important; height:36px!important; border-radius:50%; background:#111; padding:8px; color:#fff; }
+#micBtn path { fill:#fff!important; stroke:#fff!important; }
+#btnMore { order:0; width:31px!important; height:31px!important; }
+#msgInput { order:1; height:36px; border-radius:18px; padding:0 48px 0 13px; font-size:16px; }
+#holdTalkBtn { order:1; height:36px; border-radius:18px; }
+#btnEmoji { order:2; width:28px!important; height:28px!important; margin-left:-48px; z-index:2; }
+#btnEmoji path, #btnEmoji rect, #btnEmoji circle { stroke:#111!important; fill:none; }
+#btnEmoji circle { fill:#111!important; }
+#btnSend { order:5; }
+.input-bar::after { content:''; order:4; width:28px; height:28px; background:currentColor; color:#111; mask:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M8.6 5.2 7.3 7.8H4a2 2 0 0 0-2 2v8.2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9.8a2 2 0 0 0-2-2h-3.3l-1.3-2.6A2 2 0 0 0 13.6 4H10.4a2 2 0 0 0-1.8 1.2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z%22/%3E%3C/svg%3E') center/contain no-repeat; -webkit-mask:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M8.6 5.2 7.3 7.8H4a2 2 0 0 0-2 2v8.2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9.8a2 2 0 0 0-2-2h-3.3l-1.3-2.6A2 2 0 0 0 13.6 4H10.4a2 2 0 0 0-1.8 1.2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z%22/%3E%3C/svg%3E') center/contain no-repeat; }
+.send-btn { width:36px; height:36px; min-width:36px; }
+.send-btn::before { left:13px; top:9px; border-top-width:9px; border-bottom-width:9px; border-left-width:13px; }
+.plus-panel .plus-item[data-action="redpacket"] span::before { content:'转账'; font-size:12.5px; color:#8a8a8a; }
+.plus-panel .plus-item[data-action="redpacket"] span { font-size:0; }
+#page-miniprograms, #page-teaorder, #page-teapay, #teaCustomizeSheet { display:none!important; }
+#page-chatlist .nav-bar { background:#f7f2e8; }
+#page-chatlist .chat-list::before { content:'Search or start a new chat'; background:#fff; }
+#page-chat .nav-bar::after {
+  content:'';
+  position:absolute;
+  left:50px;
+  top:calc(env(safe-area-inset-top) + 7px);
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--wa-chat-avatar, linear-gradient(135deg,#d7dee5,#aeb7bd));
+  background-size:cover;
+  background-position:center;
+}
+#page-chat>.nav-bar #chatPeerName { margin-left:39px; max-width:38%; }
+#backFromChat { margin-right:0; }
+.wa-back-count { margin-left:-4px; margin-right:42px; color:#111; font-size:16px; font-weight:400; line-height:1; }
+.rp-detail { background:#f7f2e8; color:#111b21; border-radius:18px; }
+.rp-detail-head { background:#00a884; color:#fff; }
+.rp-open-btn { background:#111; color:#fff; }
+
+/* ===== 动效：消息气泡出现、输入中、转账提示、未读徽标 ===== */
 @keyframes bubbleIn { from { opacity:0; transform:translateY(10px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
 .msg-col:last-child { animation:bubbleIn .28s cubic-bezier(.25,.46,.45,.94); }
 .msg-system:last-child { animation:bubbleIn .28s cubic-bezier(.25,.46,.45,.94); }
@@ -557,20 +624,20 @@ body { background:#f0f2f5; color:#111b21; }
     <div class="tab-bar" data-tabbar></div>
   </div>
 
-  <!-- Tab2: 通讯录 -->
+  <!-- Tab2: Calls -->
   <div class="page hidden" id="page-contacts" data-tab="contacts">
     <div class="nav-bar">
       <span></span>
-      <span class="nav-title">通讯录</span>
+      <span class="nav-title">Calls</span>
       <svg class="icon-btn" id="btnAddMenu2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#000" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
     </div>
     <div class="chat-list" id="contactListItems"></div>
     <div class="tab-bar" data-tabbar></div>
   </div>
 
-  <!-- Tab3: 发现 -->
+  <!-- Tab3: Updates -->
   <div class="page hidden" id="page-discover" data-tab="discover">
-    <div class="nav-bar"><span></span><span class="nav-title">发现</span><span></span></div>
+    <div class="nav-bar"><span></span><span class="nav-title">Updates</span><span></span></div>
     <div class="discover-scroll">
       <div class="list-block">
         <div class="list-row" id="rowMoments">
@@ -578,7 +645,7 @@ body { background:#f0f2f5; color:#111b21; }
             <div class="row-icon" style="background:#07c160;">
               <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="#fff" stroke-width="1.8"/></svg>
             </div>
-            <span>朋友圈</span>
+            <span>Status</span>
           </div>
           <svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="#c7c7cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -589,7 +656,7 @@ body { background:#f0f2f5; color:#111b21; }
             <div class="row-icon" style="background:#5a5a6a;">
               <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" fill="none" stroke="#fff" stroke-width="1.6"/><line x1="14" y1="14" x2="20" y2="14" stroke="#fff" stroke-width="1.6"/><line x1="14" y1="20" x2="20" y2="20" stroke="#fff" stroke-width="1.6"/><line x1="17" y1="14" x2="17" y2="20" stroke="#fff" stroke-width="1.6"/></svg>
             </div>
-            <span>扫一扫</span>
+            <span>Channels</span>
           </div>
           <svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="#c7c7cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -598,7 +665,7 @@ body { background:#f0f2f5; color:#111b21; }
             <div class="row-icon" style="background:linear-gradient(135deg,#ff6a3d,#ffb03d);">
               <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M9 9l6 3-6 3z" fill="#fff"/></svg>
             </div>
-            <span>视频号</span>
+            <span>Broadcast lists</span>
           </div>
           <svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="#c7c7cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -607,7 +674,7 @@ body { background:#f0f2f5; color:#111b21; }
             <div class="row-icon" style="background:linear-gradient(135deg,#7b6cf6,#4e3bd6);">
               <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16" cy="8" r="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="16" r="4" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
             </div>
-            <span>小程式</span>
+            <span>Mini apps</span>
           </div>
           <svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="#c7c7cc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -626,15 +693,14 @@ body { background:#f0f2f5; color:#111b21; }
     <div class="wa-empty-panel">
       <div class="wa-community-icon">◎</div>
       <h2>Communities</h2>
-      <p>这里先保留给群聊和小程式入口，不影响现有聊天同步。</p>
-      <button type="button" id="waOpenMiniProgramsBtn">Open mini apps</button>
+      <p>Group spaces can live here later. Chats stay synced across the WhatsApp-style app.</p>
     </div>
     <div class="tab-bar" data-tabbar></div>
   </div>
 
-  <!-- Tab4: 我 -->
+  <!-- Tab4: Settings -->
   <div class="page hidden" id="page-me" data-tab="me">
-    <div class="nav-bar"><span></span><span class="nav-title">我</span><span></span></div>
+    <div class="nav-bar"><span></span><span class="nav-title">Settings</span><span></span></div>
     <div class="me-scroll">
       <div class="profile-header">
         <div id="meAvatar" class="avatar" style="width:64px;height:64px;border-radius:7px;"></div>
@@ -670,18 +736,19 @@ body { background:#f0f2f5; color:#111b21; }
   <div class="page hidden" id="page-chat">
     <div class="nav-bar">
       <svg class="icon-btn nav-back" id="backFromChat" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="wa-back-count">111</span>
       <span class="nav-title" id="chatPeerName">角色</span>
-      <div class="chat-nav-actions"><svg class="icon-btn" id="btnChatSearch" viewBox="0 0 24 24" aria-label="搜索聊天记录"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#000" stroke-width="1.7"/><path d="M15.5 15.5L21 21" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round"/></svg><svg class="icon-btn" id="btnChatSettings" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></div>
+      <div class="chat-nav-actions"><svg class="icon-btn" id="btnChatSearch" viewBox="0 0 24 24" aria-label="搜索聊天记录"><rect x="3" y="6" width="13" height="12" rx="2.3" fill="none" stroke="#000" stroke-width="1.8"/><path d="M16 10l5-3v10l-5-3z" fill="none" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg><svg class="icon-btn" id="btnChatSettings" viewBox="0 0 24 24"><path d="M5 4c1 4 2 7 5 9s5 4 9 5l1-3c-2-1-3-2-5-3l-2 2c-2-1-4-3-5-5l2-2c-1-2-2-3-3-5z" fill="none" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
     </div>
     <div class="msg-list" id="msgList"></div>
     <div class="input-bar">
       <div class="quote-compose hidden" id="quoteCompose"><div class="quote-compose-text" id="quoteComposeText"></div><button class="quote-compose-close" id="quoteComposeClose">×</button></div>
-      <svg class="icon-btn" id="micBtn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#666" stroke-width="1.6"/><path d="M12 7a2.2 2.2 0 0 1 2.2 2.2v3.6a2.2 2.2 0 0 1-4.4 0V9.2A2.2 2.2 0 0 1 12 7z" fill="#666"/><path d="M8.5 12.5a3.5 3.5 0 0 0 7 0" fill="none" stroke="#666" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-btn" id="micBtn" viewBox="0 0 24 24"><path d="M12 4a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V7a3 3 0 0 1 3-3z" fill="#111"/><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v4" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>
       <input type="text" id="msgInput" placeholder="发消息...">
       <div class="hold-talk-btn hidden" id="holdTalkBtn">按住 说话</div>
       <div class="voice-record-overlay hidden" id="voiceRecordOverlay"><div class="voice-record-time" id="voiceRecordTime">0″</div><div class="voice-record-wave"><i></i><i></i><i></i><i></i></div><div class="voice-record-hint" id="voiceRecordHint">松开发送 · 上滑取消</div></div>
-      <svg class="icon-btn" id="btnEmoji" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#666" stroke-width="1.6"/><circle cx="9" cy="10.5" r="1.1" fill="#666"/><circle cx="15" cy="10.5" r="1.1" fill="#666"/><path d="M8.3 14c1 1.3 2.3 1.9 3.7 1.9s2.7-.6 3.7-1.9" fill="none" stroke="#666" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <svg class="icon-btn" id="btnMore" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#666" stroke-width="1.6"/><path d="M12 8v8M8 12h8" stroke="#666" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="icon-btn" id="btnEmoji" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="3" fill="none" stroke="#111" stroke-width="1.6"/><path d="M15.5 20H19l-4-4v3.5a.5.5 0 0 0 .5.5z" fill="#111"/><circle cx="10" cy="10" r="1" fill="#111"/><circle cx="14" cy="10" r="1" fill="#111"/></svg>
+      <svg class="icon-btn" id="btnMore" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#111" stroke-width="2" stroke-linecap="round"/></svg>
       <button class="send-btn hidden" id="btnSend">发送</button>
     </div>
     <div class="multi-select-bar hidden" id="multiSelectBar"><button id="multiSelectCancel">取消</button><span id="multiSelectCount">已选择 0 条</span><button class="forward" id="multiSelectForward">转发</button></div>
@@ -710,7 +777,7 @@ body { background:#f0f2f5; color:#111b21; }
           </div>
           <div class="plus-item" data-action="redpacket">
             <div class="plus-icon-circle"><svg viewBox="0 0 24 24"><path d="M4.5 7h15a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" fill="#4a4a4a"/><path d="M4.5 7l7.5 5.5L19.5 7z" fill="#6b6b6b"/><circle cx="12" cy="7.3" r="1.5" fill="#fff"/></svg></div>
-            <span>红包</span>
+            <span>转账</span>
           </div>
           <div class="plus-item" data-action="sticker">
             <div class="plus-icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#4a4a4a"/><circle cx="8.7" cy="10" r="1.4" fill="#fff"/><circle cx="15.3" cy="10" r="1.4" fill="#fff"/><path d="M7.8 14.3c1.1 1.6 2.7 2.4 4.2 2.4s3.1-.8 4.2-2.4" stroke="#fff" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div>
@@ -806,7 +873,7 @@ body { background:#f0f2f5; color:#111b21; }
       </div>
       <div class="settings-section-label">功能</div>
       <div class="settings-menu-group">
-        <button class="settings-menu-row" data-settings-page="page-settings-behavior" data-settings-keywords="通知 主动消息 朋友圈 头像 红包"><span class="settings-menu-icon notify">●</span><span class="settings-menu-copy"><b>通知与主动功能</b><small id="settingsBehaviorSummary">消息、朋友圈与红包</small></span><svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+        <button class="settings-menu-row" data-settings-page="page-settings-behavior" data-settings-keywords="通知 主动消息 状态 头像 转账"><span class="settings-menu-icon notify">●</span><span class="settings-menu-copy"><b>通知与主动功能</b><small id="settingsBehaviorSummary">消息、状态与转账</small></span><svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
         <button class="settings-menu-row" data-settings-page="page-settings-cloud" data-settings-keywords="云端 同步 备份 导入 导出"><span class="settings-menu-icon cloud">☁</span><span class="settings-menu-copy"><b>云端与备份</b><small id="settingsCloudSummary">检查同步状态</small></span><svg class="chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
       </div>
       <div class="settings-search-empty hidden" id="settingsSearchEmpty">没有找到相关设置</div>
@@ -868,9 +935,9 @@ body { background:#f0f2f5; color:#111b21; }
       <div class="settings-group-title">通知</div><div class="settings-form-group"><div class="form-row"><label>新消息系统通知</label><label class="switch"><input type="checkbox" id="cfgNotifications"><span class="slider"></span></label></div></div>
       <div class="settings-group-title">主动功能</div><div class="settings-form-group">
       <div class="form-row"><label>允许AI主动发消息</label><label class="switch"><input type="checkbox" id="cfgAutoMsg"><span class="slider"></span></label></div>
-      <div class="form-row"><label>允许AI主动发朋友圈</label><label class="switch"><input type="checkbox" id="cfgAutoMoment"><span class="slider"></span></label></div>
+      <div class="form-row"><label>允许AI主动发状态</label><label class="switch"><input type="checkbox" id="cfgAutoMoment"><span class="slider"></span></label></div>
       <div class="form-row"><label>允许AI主动换头像</label><label class="switch"><input type="checkbox" id="cfgAutoAvatar"><span class="slider"></span></label></div>
-      <div class="form-row"><label>幸运牌红包</label><label class="switch"><input type="checkbox" id="cfgAutoRedpacket"><span class="slider"></span></label></div></div>
+      <div class="form-row"><label>幸运牌转账</label><label class="switch"><input type="checkbox" id="cfgAutoRedpacket"><span class="slider"></span></label></div></div>
       <button class="settings-primary-btn settings-save-btn">保存</button>
     </div>
   </div>
@@ -924,9 +991,9 @@ body { background:#f0f2f5; color:#111b21; }
     </div>
   </div>
 
-  <!-- 小程式列表 -->
+  <!-- Legacy modules are hidden in the WhatsApp shell -->
   <div class="page hidden" id="page-miniprograms">
-    <div class="nav-bar"><svg class="icon-btn nav-back" id="backFromMiniPrograms" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#000" stroke-width="2"/></svg><span class="nav-title">小程式</span><span></span></div>
+    <div class="nav-bar"><svg class="icon-btn nav-back" id="backFromMiniPrograms" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#000" stroke-width="2"/></svg><span class="nav-title">Tools</span><span></span></div>
     <div class="mini-programs-scroll" id="miniProgramStoreList"></div>
   </div>
 
@@ -976,7 +1043,7 @@ body { background:#f0f2f5; color:#111b21; }
 
   <!-- 奶茶支付页 -->
   <div class="page hidden" id="page-teapay">
-    <div class="nav-bar"><svg class="icon-btn nav-back" id="backFromTeaPay" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#000" stroke-width="2"/></svg><span class="nav-title">微信支付</span><span></span></div>
+    <div class="nav-bar"><svg class="icon-btn nav-back" id="backFromTeaPay" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="#000" stroke-width="2"/></svg><span class="nav-title">Payment</span><span></span></div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding-top:58px;background:#f5f5f5;"><div style="font-size:14px;color:#777;" id="teaPayStoreName">沐茶 MUTEA</div><div style="font-size:12px;color:#aaa;margin-top:7px;" id="teaPaySummary"></div><div style="font-size:38px;font-weight:700;margin:14px 0 30px;" id="teaPayAmount">¥0.00</div><div class="form-row" style="width:88%;"><label>付款方式</label><span id="teaPayMethod" style="color:#07c160;font-size:14px;">零钱余额</span></div><div class="form-row" id="teaPayBalanceRow" style="width:88%;"><label>当前余额</label><span id="teaPayCurrentBalance" style="font-size:14px;"></span></div><button class="save-btn" id="teaConfirmPayBtn" style="width:88%;margin-top:40px;">确认支付</button></div>
   </div>
 
@@ -1070,14 +1137,14 @@ body { background:#f0f2f5; color:#111b21; }
     </div>
   </div>
 
-  <!-- 发红包 -->
+  <!-- 转账 -->
   <div class="mask hidden" id="sendRedPacketSheet">
     <div class="sheet redpacket-sheet">
-      <div class="sheet-title">发红包</div>
+      <div class="sheet-title">Transfer</div>
       <div class="rp-money-box"><label>金额</label><input id="rpAmount" inputmode="decimal" type="number" min="0.01" max="200" step="0.01" placeholder="0.00"><b>元</b></div>
-      <div class="rp-note-box"><input id="rpNote" placeholder="恭喜发财，大吉大利" maxlength="30"></div>
-      <div class="rp-limit">单个红包金额不可超过 200 元</div>
-      <div class="sheet-actions"><div class="sheet-btn cancel" id="rpCancel">取消</div><div class="sheet-btn confirm rp-confirm" id="rpConfirm">塞钱进红包</div></div>
+      <div class="rp-note-box"><input id="rpNote" placeholder="备注" maxlength="30"></div>
+      <div class="rp-limit">单笔转账金额不可超过 200 元</div>
+      <div class="sheet-actions"><div class="sheet-btn cancel" id="rpCancel">取消</div><div class="sheet-btn confirm rp-confirm" id="rpConfirm">确认转账</div></div>
     </div>
   </div>
 
@@ -1094,7 +1161,7 @@ body { background:#f0f2f5; color:#111b21; }
     </div>
   </div>
 
-  <!-- 红包详情/领取 -->
+  <!-- 转账详情/领取 -->
   <div class="mask hidden" id="redPacketOpenSheet"><div class="rp-detail">
     <div class="rp-detail-head"><div class="rp-detail-avatar" id="rpDetailAvatar"></div><div class="rp-detail-sender" id="rpDetailSender"></div><div class="rp-detail-note" id="rpDetailNote"></div></div>
     <div class="rp-open-btn hidden" id="rpDetailOpen">开</div>
@@ -1262,11 +1329,11 @@ body { background:#f0f2f5; color:#111b21; }
   </div>
 </div>
 
-<script src="js/tarot.js?v=2" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
-<script src="js/wordcards.js?v=2" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
-<script src="js/dictionary.js?v=2" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
-<script src="js/ai.js?v=2" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
-<script src="js/cloud.js?v=2" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
-<script src="js/app.js?v=2" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
+<script src="js/tarot.js?v=3" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
+<script src="js/wordcards.js?v=3" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
+<script src="js/dictionary.js?v=3" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
+<script src="js/ai.js?v=3" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
+<script src="js/cloud.js?v=3" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
+<script src="js/app.js?v=3" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
 </body>
 </html>
