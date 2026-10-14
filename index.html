@@ -567,6 +567,61 @@ body { background:#f0f2f5; color:#111b21; }
 .rp-detail-head { background:#00a884; color:#fff; }
 .rp-open-btn { background:#111; color:#fff; }
 
+/* ===== WhatsApp alignment fix: stable header and input controls ===== */
+#page-chat .nav-bar {
+  display:flex;
+  align-items:center;
+  gap:0;
+  min-height:58px;
+  padding-left:12px;
+  padding-right:14px;
+  overflow:visible;
+}
+#backFromChat { flex:0 0 26px; width:26px!important; height:26px!important; margin:0 4px 0 0; }
+.wa-back-count { flex:0 0 auto; margin:0 52px 0 0; font-size:16px; color:#111; }
+#page-chat .nav-bar::after { left:82px; top:calc(env(safe-area-inset-top) + 8px); width:38px; height:38px; }
+#page-chat>.nav-bar #chatPeerName {
+  margin:0;
+  flex:1 1 auto;
+  min-width:0;
+  max-width:none;
+  text-align:left;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:17px;
+}
+#page-chat .chat-nav-actions { flex:0 0 auto; gap:18px; margin-left:12px; }
+#page-chat .chat-nav-actions .icon-btn { width:29px!important; height:29px!important; }
+#page-chat .input-bar {
+  display:flex;
+  align-items:center;
+  min-height:54px;
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+  gap:9px;
+  flex-wrap:nowrap;
+}
+#btnMore { order:0; flex:0 0 31px; width:31px!important; height:31px!important; }
+#msgInput, #holdTalkBtn { order:1; flex:1 1 auto; min-width:0; height:38px; border-radius:19px; }
+#btnEmoji { order:2; flex:0 0 28px; width:28px!important; height:28px!important; margin-left:-46px; }
+.input-bar::after { order:3; flex:0 0 27px; width:27px; height:27px; margin-left:4px; }
+#micBtn {
+  order:4;
+  flex:0 0 38px;
+  width:38px!important;
+  height:38px!important;
+  min-width:38px;
+  border-radius:50%;
+  background:#111!important;
+  color:#fff!important;
+  padding:8px!important;
+}
+#micBtn circle, #micBtn rect, #micBtn path { stroke:#fff!important; }
+#micBtn path[fill], #micBtn circle[fill], #micBtn rect[fill] { fill:#fff!important; }
+#btnSend { order:4; flex:0 0 38px; width:38px!important; height:38px!important; min-width:38px; }
+.input-bar .icon-btn, .send-btn, .plus-item, .bubble.transfer { transition:transform .12s ease, opacity .12s ease, background-color .12s ease; }
+.input-bar .icon-btn:active, .send-btn:active, .plus-item:active, .bubble.transfer:active { transform:scale(.94); opacity:.78; }
+
 /* ===== 动效：消息气泡出现、输入中、转账提示、未读徽标 ===== */
 @keyframes bubbleIn { from { opacity:0; transform:translateY(10px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
 .msg-col:last-child { animation:bubbleIn .28s cubic-bezier(.25,.46,.45,.94); }
@@ -1329,11 +1384,11 @@ body { background:#f0f2f5; color:#111b21; }
   </div>
 </div>
 
-<script src="js/tarot.js?v=3" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
-<script src="js/wordcards.js?v=3" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
-<script src="js/dictionary.js?v=3" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
-<script src="js/ai.js?v=3" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
-<script src="js/cloud.js?v=3" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
-<script src="js/app.js?v=3" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
+<script src="js/tarot.js?v=4" onerror="window.__scriptLoadError('js/tarot.js 无法加载')"></script>
+<script src="js/wordcards.js?v=4" onerror="window.__scriptLoadError('js/wordcards.js 无法加载')"></script>
+<script src="js/dictionary.js?v=4" onerror="window.__scriptLoadError('js/dictionary.js 无法加载')"></script>
+<script src="js/ai.js?v=4" onerror="window.__scriptLoadError('js/ai.js 无法加载')"></script>
+<script src="js/cloud.js?v=4" onerror="window.__scriptLoadError('js/cloud.js 无法加载')"></script>
+<script src="js/app.js?v=4" onerror="window.__scriptLoadError('js/app.js 无法加载')"></script>
 </body>
 </html>
