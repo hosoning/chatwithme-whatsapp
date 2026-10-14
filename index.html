@@ -622,6 +622,68 @@ body { background:#f0f2f5; color:#111b21; }
 .input-bar .icon-btn, .send-btn, .plus-item, .bubble.transfer { transition:transform .12s ease, opacity .12s ease, background-color .12s ease; }
 .input-bar .icon-btn:active, .send-btn:active, .plus-item:active, .bubble.transfer:active { transform:scale(.94); opacity:.78; }
 
+/* ===== WhatsApp bubble shape fix: flat bubbles with tails ===== */
+.msg-list {
+  padding-left:12px;
+  padding-right:12px;
+  overflow-x:hidden;
+}
+.msg-row { overflow:visible; }
+.msg-row .bubble {
+  position:relative;
+  border-radius:7.5px!important;
+  box-shadow:none!important;
+}
+.msg-row:not(.me) .bubble {
+  margin-left:8px;
+  background:#fff!important;
+  border-top-left-radius:0!important;
+}
+.msg-row.me .bubble {
+  margin-right:8px;
+  background:#d9fdd3!important;
+  border-top-right-radius:0!important;
+}
+.msg-row .bubble::before {
+  content:''!important;
+  display:block!important;
+  position:absolute;
+  top:0;
+  width:0;
+  height:0;
+  border-style:solid;
+  z-index:0;
+}
+.msg-row:not(.me) .bubble::before {
+  left:-8px;
+  border-width:0 8px 8px 0;
+  border-color:transparent #fff transparent transparent!important;
+}
+.msg-row.me .bubble::before {
+  right:-8px;
+  border-width:0 0 8px 8px;
+  border-color:transparent transparent transparent #d9fdd3!important;
+}
+.bubble.image::before,
+.bubble.sticker::before,
+.bubble.redpacket::before { display:none!important; }
+.bubble.location,
+.bubble.options,
+.chat-record-bubble { box-shadow:none!important; }
+.msg-row:not(.me) .bubble.location::before,
+.msg-row:not(.me) .bubble.options::before,
+.msg-row:not(.me) .chat-record-bubble::before { border-color:transparent #fff transparent transparent!important; }
+.msg-row.me .bubble.location::before,
+.msg-row.me .bubble.options::before,
+.msg-row.me .chat-record-bubble::before { border-color:transparent transparent transparent #d9fdd3!important; }
+.bubble.voice,
+.bubble.call { border-radius:7.5px!important; }
+.voice-transcript { box-shadow:none!important; }
+.bubble.transfer {
+  border-radius:7.5px!important;
+  box-shadow:none!important;
+}
+
 /* ===== 动效：消息气泡出现、输入中、转账提示、未读徽标 ===== */
 @keyframes bubbleIn { from { opacity:0; transform:translateY(10px) scale(.96); } to { opacity:1; transform:translateY(0) scale(1); } }
 .msg-col:last-child { animation:bubbleIn .28s cubic-bezier(.25,.46,.45,.94); }
